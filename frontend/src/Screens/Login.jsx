@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Slider from "react-slick";
+import { Link } from "react-router-dom";
 
 const bannerImages = [
   "https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?cs=srgb&dl=pexels-souvenirpixels-414612.jpg&fm=jpg",
@@ -74,9 +75,9 @@ const Banner = ({ email, setEmail, password, setPassword, handleLogin }) => {
 
               <p className="text-center text-sm text-white mt-6">
                 Don’t have an account?{" "}
-                <a href="/signup" className="text-blue-600 hover:underline">
+                <Link to="/signup" className="text-blue-600 hover:underline">
                   Sign up
-                </a>
+                </Link>
               </p>
             </div>
           </div>
