@@ -1,16 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from 'axios';
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  }
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    
+    try {
+      await axios.post("http://localhost:3001/api/contact", formData);
+      alert("Form submitted successfully");
+      setFormData({
+        name: "",
+        email: "",
+        message: "",
+      })
+    } catch (error) {
+      console.log(error);
+      alert("Failed");
+    }
+
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-16">
       <div className="max-w-3xl w-full bg-base-200/50 p-8 rounded-2xl shadow-lg shadow-gray-600 border-1 border-amber-50" >
         <h2 className="text-3xl font-bold mb-6 text-center">Contact Us</h2>
 
-        <form className="space-y-6 text-white">
+        <form className="space-y-6 text-white" onSubmit={handleSubmit}>
           <div>
             <label className="block text-sm font-medium">Name</label>
             <input
               type="text"
+              name="name"
+              onChange={handleChange}
+              value={formData.name}
               placeholder="Your name"
               className="w-full mt-1 p-3 border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -20,6 +53,9 @@ const Contact = () => {
             <label className="block text-sm font-medium ">Email</label>
             <input
               type="email"
+              name="email"
+              onChange={handleChange}
+              value={formData.email}
               placeholder="you@example.com"
               className="w-full mt-1 p-3 border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -29,7 +65,10 @@ const Contact = () => {
             <label className="block text-sm font-medium ">Message</label>
             <textarea
               rows="5"
+              name="message"
+              value={formData.message}
               placeholder="Your message..."
+              onChange={handleChange}
               className="w-full mt-1 p-3 border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
             ></textarea>
           </div>
