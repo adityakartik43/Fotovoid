@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import Swal from "sweetalert2";
 import axios from 'axios';
 
 const Contact = () => {
@@ -13,12 +16,21 @@ const Contact = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   }
 
+  const isFormComplete = () => {
+    return formData.name.trim() !== "" && formData.email.trim() !== "" && formData.message.trim() !== "";
+  };
+
   const handleSubmit = async(e) => {
     e.preventDefault();
+
+    if(!isFormComplete()){
+    toast.error("Fill all fields");
+   }
+   else {
     
     try {
       await axios.post("http://localhost:3001/api/contact", formData);
-      alert("Form submitted successfully");
+      toast.success("Form submitted successfully!");
       setFormData({
         name: "",
         email: "",
@@ -26,12 +38,13 @@ const Contact = () => {
       })
     } catch (error) {
       console.log(error);
-      alert("Failed");
+      toast.error("Form submission failed");
     }
-
+  }
   }
 
   return (
+    <>
     <div className="min-h-screen flex items-center justify-center px-4 py-16">
       <div className="max-w-3xl w-full bg-base-200/50 p-8 rounded-2xl shadow-lg shadow-gray-600 border-1 border-amber-50" >
         <h2 className="text-3xl font-bold mb-6 text-center">Contact Us</h2>
@@ -86,6 +99,10 @@ const Contact = () => {
         </p>
       </div>
     </div>
+
+    <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
+
+    </>
   );
 };
 
