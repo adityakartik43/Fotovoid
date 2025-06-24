@@ -1,6 +1,6 @@
 const isLoggined = () => {
-    const token = localStorage.getItem('token');
-    return !!token;
-}
+  const token = localStorage.getItem("token");
+  return !!token;
+};
 
 export default isLoggined;
