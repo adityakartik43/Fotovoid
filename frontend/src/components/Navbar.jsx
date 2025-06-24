@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import isLoggined from "../utils/isLoggined";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,6 +26,56 @@ const Navbar = () => {
     </>
   );
 
+  const logout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('expiry')
+    window.location.href = '/login'
+  }
+
+  const LoginButton = (
+    <>
+      <Link
+        to="/login"
+        className="btn bg-blue-700 hover:bg-pink-700 text-white w-full mt-4"
+      >
+        LOGIN
+      </Link>
+    </>
+  );
+  const LogoutButton = (
+    <>
+      <Link
+        onClick={logout}
+        className="btn bg-red-700 hover:bg-red-900 text-white w-full mt-4"
+      >
+        LOGOUT
+      </Link>
+    </>
+  );
+
+  const desktopLoginButton = (
+    <>
+      <Link
+        to="/login"
+        className="btn bg-blue-700 hover:bg-pink-700 text-white transition-transform duration-300 hover:scale-110"
+      >
+        LOGIN
+      </Link>
+    </>
+  );
+  const desktopLogoutButton = (
+    <>
+      <Link
+        onClick={logout}
+        className="btn bg-red-700 hover:bg-red-900 text-white transition-transform duration-300 hover:scale-110"
+      >
+        LOGOUT
+      </Link>
+    </>
+  );
+
+  // console.log(isLoggined())
+
   return (
     <>
       {/* Navbar Container */}
@@ -43,12 +94,7 @@ const Navbar = () => {
         {/* Desktop Navigation + Login Button */}
         <div className="hidden lg:flex items-center gap-6">
           <ul className="menu menu-horizontal px-1 gap-4">{NavItems}</ul>
-          <Link
-            to="/login"
-            className="btn bg-blue-700 hover:bg-pink-700 text-white transition-transform duration-300 hover:scale-110"
-          >
-            LOGIN
-          </Link>
+          {isLoggined() ? desktopLogoutButton : desktopLoginButton }
         </div>
       </div>
 
@@ -78,14 +124,7 @@ const Navbar = () => {
           onClick={() => setIsOpen(false)}
         >
           {NavItems}
-          <li>
-            <Link
-              to="/login"
-              className="btn bg-blue-700 hover:bg-pink-700 text-white w-full mt-4"
-            >
-              LOGIN
-            </Link>
-          </li>
+          <li>{isLoggined() ? LogoutButton : LoginButton}</li>
         </ul>
       </div>
     </>

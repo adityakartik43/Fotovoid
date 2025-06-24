@@ -9,6 +9,6 @@ const router = express.Router();
 
 router.post('/upload', auth, upload.single('image'), uploadImage);
 router.get('/', auth, getUserImage);
-router.get('/random-image', getRandomImages);
+router.get('/random-image', auth, getRandomImages);
 
 export default router

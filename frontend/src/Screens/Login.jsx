@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Slider from "react-slick";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const bannerImages = [
   "https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?cs=srgb&dl=pexels-souvenirpixels-414612.jpg&fm=jpg",
@@ -91,10 +92,27 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     // 🔐 Replace with real auth logic
-    console.log("Logging in with:", { email, password });
+    
+    try {
+      const res = await axios.post("http://localhost:3001/api/auth/login", {
+        email, password
+      });
+
+      const expiryTime = Date.now() + 1000 * 60;
+      
+      localStorage.setItem('token', res.data.token);
+      localStorage.setItem("expiry", expiryTime);
+      window.location.href = '/dashboard';
+  
+      alert("Login Successful");
+    } catch (error) {
+      console.log(error);
+      alert("Login failed!");
+    }
+
   };
 
   return (

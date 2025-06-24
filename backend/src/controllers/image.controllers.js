@@ -17,11 +17,11 @@ const uploadImage = async (req, res) => {
 const getRandomImages = async (req, res) => {
   try {
     const images = await imageModel.aggregate([{ $sample: { size: 1 }}]);
-
+    
     const randomImg = images[0];
     const imageUrl = randomImg.url;
 
-    res.redirect(imageUrl);
+    res.send(imageUrl);
   } catch (error) {
     res.json({
       message: error,

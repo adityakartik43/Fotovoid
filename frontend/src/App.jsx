@@ -9,11 +9,18 @@ import APIs from './Screens/APIs'
 import { Routes, Route } from 'react-router-dom'
 import Login from './Screens/Login'
 import Signup from './Screens/Signup'
+import autoLogout from './utils/autoLogout'
+import AdminDashboard from './Screens/AdminDashboard'
 
 const App = () => {
 
+  autoLogout();
+
   return (
     <>
+    <Routes>
+      <Route path='/admin' element={<AdminDashboard />} />
+    </Routes>
     <Navbar />
     <Routes>
       <Route path="/" element={<Homepage />} />

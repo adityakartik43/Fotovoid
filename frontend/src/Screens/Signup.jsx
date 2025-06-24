@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Slider from "react-slick";
+import axios from 'axios';
 
 const bannerImages = [
   "https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?cs=srgb&dl=pexels-souvenirpixels-414612.jpg&fm=jpg",
@@ -77,7 +78,9 @@ const Banner = ({
               </div>
 
               <div>
-                <label className="block mb-1 text-white text-sm">Password</label>
+                <label className="block mb-1 text-white text-sm">
+                  Password
+                </label>
                 <input
                   type="password"
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -89,7 +92,9 @@ const Banner = ({
               </div>
 
               <div>
-                <label className="block mb-1 text-white text-sm">Confirm Password</label>
+                <label className="block mb-1 text-white text-sm">
+                  Confirm Password
+                </label>
                 <input
                   type="password"
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -122,28 +127,39 @@ const Banner = ({
 };
 
 const Signup = () => {
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
+
     if (password !== confirmPassword) {
-      alert("Passwords do not match.");
+      alert("Passwords do not match");
       return;
     }
-    // 🔐 Replace with actual signup logic (API call etc.)
-    console.log("Signing up with:", { name, email, password });
+
+    try {
+      const res = await axios.post("http://localhost:3001/api/auth/register", {
+        username,
+        email,
+        password,
+      });
+      alert(res.data.message || "Signup successful");
+    } catch (error) {
+      console.error(error);
+      alert("Signup failed");
+    }
   };
 
   return (
     <Banner
-      name={name}
+      name={username}
       email={email}
       password={password}
       confirmPassword={confirmPassword}
-      setName={setName}
+      setName={setUsername}
       setEmail={setEmail}
       setPassword={setPassword}
       setConfirmPassword={setConfirmPassword}
