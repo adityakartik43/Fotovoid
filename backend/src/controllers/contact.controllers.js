@@ -1,4 +1,5 @@
 import Contact from '../models/contact.model.js'
+import User from '../models/user.models.js';
 
 const contact = async (req, res) => {
     try {
@@ -11,6 +12,13 @@ const contact = async (req, res) => {
             });
         }
 
+        let userExists = false;
+
+        const userExist = await User.findOne({ email });
+        if(userExist){
+            userExists = true;
+        }
+
         const contactDetails = new Contact({
             name,
             email,
@@ -20,7 +28,8 @@ const contact = async (req, res) => {
         await contactDetails.save();
     
         res.status(201).json({
-            message: "Message saved"
+            message: "Message saved",
+            userExist: userExists
         });
     } catch (error) {
         res.status(500).json({

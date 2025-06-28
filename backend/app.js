@@ -6,6 +6,7 @@ import cors from 'cors'
 import authRoutes from './src/routes/auth.routes.js'
 import imageRoutes from './src/routes/image.routes.js'
 import contactRoutes from './src/routes/contact.routes.js'
+import apiRoutes from './src/routes/apikeys.routes.js'
 
 dotenv.config()
 
@@ -23,6 +24,8 @@ connectDB();
 app.use('/api/auth', authRoutes);
 app.use('/api/images', imageRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/apikeys', apiRoutes);
+
 
 const port = process.env.PORT || 5000;
 
