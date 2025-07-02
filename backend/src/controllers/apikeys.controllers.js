@@ -39,27 +39,21 @@ const generateApiKey = async (req, res) => {
 const deleteApiKey = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { key } = req.body;
+    const apiKeyId = req.query.key;
 
-    const apiKey = await apikeysModel.findOne({ userId, key });
-
+    const apiKey = await apikeysModel.findOne({ apiKeyId, userId });
     if (!apiKey) {
-      return res.status(404).json({
-        success: false,
-        message: "API Key not found",
-      });
+      return res
+        .status(404)
+        .json({ success: false, message: "API Key not found or unauthorized" });
     }
 
-    await apikeysModel.deleteOne({ _id: apiKey._id });
-
-    return res.status(201).json({
-      success: true,
-      message: "API Key deleted successfully",
-    });
+    await apikeysModel.deleteOne({ apiKeyId });
+    return res
+      .status(200)
+      .json({ success: true, message: "API Key deleted successfully" });
   } catch (error) {
-    return res.status(500).json({
-      message: error.message,
-    });
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 

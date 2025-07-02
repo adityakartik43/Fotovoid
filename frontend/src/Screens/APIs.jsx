@@ -1,17 +1,27 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import isLoggined from "../utils/isLoggined.js";
 
 const APIs = () => {
   const [apiKeys, setApiKeys] = useState([]);
+  // const [loading, setLoading] = useState(false);
+
+  // loading = (
+  //   <>
+  //   </>
+  // )
 
   const fetchApi = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:3001/api/apikeys/getallapi", {
-        headers: {
-          Authorization: token,
-        },
-      });
+      const res = await axios.get(
+        "http://localhost:3001/api/apikeys/getallapi",
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
 
       const keyString = res.data.data;
       setApiKeys(keyString);
@@ -23,24 +33,44 @@ const APIs = () => {
   };
 
   const handleGenerateKey = async () => {
-    try {
+    setTimeout(async()=>{
+       try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:3001/api/apikeys/generate", {
-        headers: {
-          Authorization: token,
-        },
-      });
+      const response = await axios.get(
+        "http://localhost:3001/api/apikeys/generate",
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
 
       console.log("New Key:", response.data.apiKey);
       await fetchApi(); // refresh the list after generating new key
     } catch (error) {
       console.log(error);
     }
+    }, 1000)
+   
   };
 
-  const handleDeleteKey = (keyToDelete) => {
-    const updatedKeys = apiKeys.filter((k) => k.key !== keyToDelete);
-    setApiKeys(updatedKeys);
+  const handleDeleteKey = async (keyToDelete) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete("http://localhost:3001/api/apikeys/delete", {
+        headers: {
+          Authorization: token,
+        },
+        params: {
+          keyToDelete, // this becomes ?key=abc123
+        },
+      });
+
+      const updatedKeys = apiKeys.filter((k) => k.key !== keyToDelete);
+      setApiKeys(updatedKeys);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const ApiKeysCard = ({ entry, onDelete }) => (
@@ -59,17 +89,23 @@ const APIs = () => {
   );
 
   useEffect(() => {
-    fetchApi();
+    if (isLoggined()) {
+      fetchApi();
+    }
   }, []);
 
   return (
     <div className="min-h-screen p-6">
       <div className="max-w-5xl mx-auto bg-base-200 shadow-gray-500 p-8 rounded-2xl shadow-lg space-y-10">
-        <h1 className="text-3xl font-bold text-gray-100">📡 FotoVoid API Portal</h1>
+        <h1 className="text-3xl font-bold text-gray-100">
+          📡 FotoVoid API Portal
+        </h1>
 
         {/* Installation */}
         <section>
-          <h2 className="text-xl font-semibold mb-2 text-gray-200">📦 Install Package</h2>
+          <h2 className="text-xl font-semibold mb-2 text-gray-200">
+            📦 Install Package
+          </h2>
           <div className="bg-black text-green-400 font-mono px-4 py-2 rounded">
             npm i fotovoid
           </div>
@@ -79,7 +115,7 @@ const APIs = () => {
         <section>
           <h2 className="text-xl font-semibold mb-2 text-gray-200">📘 Usage</h2>
           <pre className="bg-black text-green-100 p-4 rounded overflow-auto text-sm">
-{`import { getRandomImage } from 'fotovoid';
+            {`import { getRandomImage } from 'fotovoid';
 
 const apikey = 'your-api-key-here';
 
@@ -91,7 +127,9 @@ getRandomImage(apikey).then(url => {
 
         {/* API Keys */}
         <section>
-          <h2 className="text-xl font-semibold text-gray-100 mb-2">🔑 Your API Keys</h2>
+          <h2 className="text-xl font-semibold text-gray-100 mb-2">
+            🔑 Your API Keys
+          </h2>
           <button
             onClick={handleGenerateKey}
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded mb-4"
@@ -112,7 +150,9 @@ getRandomImage(apikey).then(url => {
 
         {/* API Endpoints */}
         <section>
-          <h2 className="text-xl font-semibold text-gray-100 mb-2">📂 API Endpoints</h2>
+          <h2 className="text-xl font-semibold text-gray-100 mb-2">
+            📂 API Endpoints
+          </h2>
           <div className="space-y-3">
             {apis.map((api, i) => (
               <div
