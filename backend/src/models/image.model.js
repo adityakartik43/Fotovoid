@@ -4,8 +4,10 @@ const imageSchema = new mongoose.Schema({
     url: String,
     public_id: String,
     user: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'User'
-    }
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User'
+    },
+    category: String,
 }, {
     timestamps: true
 });

@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import Slider from "react-slick";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const bannerImages = [
   "https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?cs=srgb&dl=pexels-souvenirpixels-414612.jpg&fm=jpg",
@@ -89,8 +92,8 @@ const Banner = ({ email, setEmail, password, setPassword, handleLogin }) => {
 };
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("aditya@gmail.com");
+  const [password, setPassword] = useState("123456");
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -105,17 +108,17 @@ const Login = () => {
       
       localStorage.setItem('token', res.data.token);
       localStorage.setItem("expiry", expiryTime);
+      toast.success("Login successfull");
       window.location.href = '/dashboard';
-  
-      alert("Login Successful");
     } catch (error) {
       console.log(error);
-      alert("Login failed!");
+      toast.error("Login failed");
     }
 
   };
 
   return (
+    <>
     <Banner
       email={email}
       setEmail={setEmail}
@@ -123,6 +126,8 @@ const Login = () => {
       setPassword={setPassword}
       handleLogin={handleLogin}
     />
+
+    </>
   );
 };
 

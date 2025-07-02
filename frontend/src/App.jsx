@@ -12,6 +12,10 @@ import Signup from './Screens/Signup'
 import autoLogout from './utils/autoLogout'
 import AdminDashboard from './Screens/AdminDashboard'
 
+
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 const App = () => {
 
   autoLogout();
@@ -35,6 +39,9 @@ const App = () => {
 
     
     <Footer />
+
+    <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
+
     </>
   )
 }

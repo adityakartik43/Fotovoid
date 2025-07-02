@@ -4,7 +4,7 @@ import auth from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
-router.get('.getallapi', auth, generateApiKey);
+router.get('/getallapi', auth, getAllApiKeys);
 router.get('/generate', auth, generateApiKey);
 router.get('/deleteapi', auth, deleteApiKey);
 

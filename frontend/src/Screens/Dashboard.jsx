@@ -1,5 +1,3 @@
-// FotoVoid Admin Dashboard (MSKR Style) - Vite + React + Tailwind
-
 import React from "react";
 
 import { Line, Pie } from "react-chartjs-2";
