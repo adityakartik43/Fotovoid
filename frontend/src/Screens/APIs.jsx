@@ -2,14 +2,17 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import isLoggined from "../utils/isLoggined.js";
 
+
 const APIs = () => {
   const [apiKeys, setApiKeys] = useState([]);
-  // const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [deletingKey, setDeletingKey] = useState(null);
 
-  // loading = (
-  //   <>
-  //   </>
-  // )
+  const genLoad = (
+   <>
+   <div className="text-green-400 text-xl font-bold text-center">Generating</div>
+   </>
+  )
 
   const fetchApi = async () => {
     try {
@@ -33,6 +36,7 @@ const APIs = () => {
   };
 
   const handleGenerateKey = async () => {
+    setLoading(true)
     setTimeout(async()=>{
        try {
       const token = localStorage.getItem("token");
@@ -46,6 +50,8 @@ const APIs = () => {
       );
 
       console.log("New Key:", response.data.apiKey);
+      
+      setLoading(false)
       await fetchApi(); // refresh the list after generating new key
     } catch (error) {
       console.log(error);
@@ -55,7 +61,10 @@ const APIs = () => {
   };
 
   const handleDeleteKey = async (keyToDelete) => {
-    try {
+    setDeletingKey(keyToDelete)
+
+    setTimeout(async()=>{
+      try {
       const token = localStorage.getItem("token");
       await axios.delete("http://localhost:3001/api/apikeys/delete", {
         headers: {
@@ -70,7 +79,11 @@ const APIs = () => {
       setApiKeys(updatedKeys);
     } catch (error) {
       console.log(error);
+    } finally {
+      setDeletingKey(null)
     }
+    }, 1000)
+    
   };
 
   const ApiKeysCard = ({ entry, onDelete }) => (
@@ -83,7 +96,7 @@ const APIs = () => {
         onClick={() => onDelete(entry.key)}
         className="text-red-600 hover:underline"
       >
-        Delete
+        {deletingKey == entry.key ? <>Deleting......</> : <>Delete</>}
       </button>
     </li>
   );
@@ -110,7 +123,6 @@ const APIs = () => {
             npm i fotovoid
           </div>
         </section>
-
         {/* Usage */}
         <section>
           <h2 className="text-xl font-semibold mb-2 text-gray-200">📘 Usage</h2>
@@ -135,6 +147,8 @@ getRandomImage(apikey).then(url => {
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded mb-4"
           >
             Generate New Key
+            
+{loading ? genLoad : <></>}
           </button>
 
           {apiKeys.length === 0 ? (
