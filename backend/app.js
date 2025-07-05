@@ -7,6 +7,8 @@ import authRoutes from './src/routes/auth.routes.js'
 import imageRoutes from './src/routes/image.routes.js'
 import contactRoutes from './src/routes/contact.routes.js'
 import apiRoutes from './src/routes/apikeys.routes.js'
+import dashboardRoutes from './src/routes/dashboard.routes.js'
+import adminRoutes from "./src/routes/admin.routes.js"
 
 dotenv.config()
 
@@ -25,6 +27,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/images', imageRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/apikeys', apiRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/admin', adminRoutes);
 
 
 const port = process.env.PORT || 5000;

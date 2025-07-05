@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 
 import { Line, Pie } from "react-chartjs-2";
 import {
@@ -14,6 +15,8 @@ import {
 
 import isLoggined from "../utils/isLoggined";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useState } from "react";
 
 ChartJS.register(
   LineElement,
@@ -88,6 +91,17 @@ const Dashboard = () => {
     },
   };
 
+  const [totalImage, setTotalImage] = useState(0)
+  useEffect(()=>{
+    const totalImage = async () => {
+      const data = await axios.get("http://localhost:3001/api/dashboard/totalimage");
+       console.log(data.data.totalImage)
+       setTotalImage(data.data.totalImage)
+    }
+
+    totalImage()
+  }, [])
+
   const dashData = (
     <div className="min-h-screen bg-base-100 p-4 md:p-8">
       <h1 className="text-2xl md:text-3xl font-bold mb-6 white md:text-start text-center">
@@ -95,7 +109,7 @@ const Dashboard = () => {
       </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        <MetricCard title="Total Images" value="12,345" />
+        <MetricCard title="Total Images" value={totalImage} />
         <MetricCard title="API calls" value="9804" />
         <MetricCard title="Downloads" value="987" />
       </div>

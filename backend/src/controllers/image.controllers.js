@@ -5,7 +5,7 @@ const uploadImage = async (req, res) => {
     url: req.file.path,
     public_id: req.file.filename,
     user: req.user.id,
-    category: req.body,
+    category: req.body.category,
   });
 
   await image.save();
